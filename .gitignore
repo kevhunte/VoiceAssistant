@@ -1,7 +1,7 @@
-# not needed
 
+#personal
 history.json
-
-.vscode
-
 logs*
+
+#editor
+.vscode
