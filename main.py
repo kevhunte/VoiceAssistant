@@ -1,5 +1,8 @@
 #/usr/bin/python3
 import speech_recognition as sr
+import playsound
+import os, random
+from gtts import gTTS
 from time import ctime
 
 r = sr.Recognizer()
@@ -24,21 +27,30 @@ def record_command():
 '''
 business logic
 '''
-def process_command(voice_data):
+def process_command(voice_data: str):
     if 'what is your name' in voice_data:
-        print(f"My name is {NAME}")
+        speak(f"My name is {NAME}")
     if 'what time is it' in voice_data:
-        print(f"The current time is {ctime()}")
+        speak(f"The current time is {ctime()}")
     if 'stop' in voice_data or 'shut down' in voice_data:
-        print('Goodbye')
+        speak('Goodbye!')
         exit()
+
+def speak(audio_string: str):
+    print(f'speaking: {audio_string}')
+    tts = gTTS(text=audio_string, lang='en')
+    r = random.randint(1,1000000)
+    audio_file = f'audio-{r}.mp3'
+    tts.save(audio_file)
+    playsound.playsound(audio_file)
+    os.remove(audio_file)
 
 
 def handler():
-    print("How can I assist you?")
+    speak("How can I assist you?")
     while True:
         voice_data = record_command()
-        print(f"you said: {voice_data}")
+        #print(f"you asked: {voice_data}")
         process_command(voice_data)
 
 if __name__ == '__main__':

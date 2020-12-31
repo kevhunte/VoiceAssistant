@@ -6,16 +6,25 @@ This is built with python 3 => 3.6
 
 # Needed libraries
 ```
+---- Speech to text modules ----
 pip3 install speechrecognition
 
 pip3 install pyaudio
 
 For macOS, portaudio is needed. Can be installed with "home brew portaudio"
+
+---- Text to Speech modules ----
+pip3 install gTTS
+
+pip3 install playsound
+
+pip3 install PyObjC
+
 ```
 
 # Usage
 ```
-This is run using
+Run using
 
 python3 main.py
 ```
