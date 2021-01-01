@@ -3,7 +3,7 @@
 from assistant import Assistant
 
 def handler():
-    VA = Assistant()
+    VA = Assistant(config="config.json")
     running = True
     while running:
         voice_data = VA.record_command()

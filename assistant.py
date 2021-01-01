@@ -1,6 +1,6 @@
 import speech_recognition as sr
 import playsound
-import os, random
+import os, random, json
 from gtts import gTTS
 from time import ctime
 
@@ -9,9 +9,25 @@ r = sr.Recognizer()
 
 class Assistant:
 
-    def __init__(self):
-        self.Name = 'Ant'
+    def __init__(self, config):
+        self.config_file_name = config
+        with open(self.config_file_name, 'r') as f:
+            self.config_data = json.load(f)
+        self.__process_config()
         self.speak(f'Hi, my name is {self.Name}. How may I assist you?')
+
+    '''
+    takes stored values and sets members of instance
+    '''
+    def __process_config(self):
+        self.Name = 'Ant' if not self.config_data['name'] else self.config_data['name']
+
+    '''
+    writes changes in memory back to file
+    '''
+    def __save_config(self):
+        with open(self.config_file_name, 'w') as f:
+            json.dump(self.config_data, f,sort_keys=True, indent=4)
 
     '''
     speech to text
@@ -36,7 +52,7 @@ class Assistant:
         print(f'speaking: {audio_string}')
         tts = gTTS(text=audio_string, lang='en')
         rand = random.randint(1,1000000)
-        audio_file = f'audio-{self.Name}-{rand}.mp3'
+        audio_file = f'audio-{rand}.mp3'
         tts.save(audio_file)
         playsound.playsound(audio_file)
         os.remove(audio_file)

@@ -1,7 +1,11 @@
 
 #personal
-history.json
+*.json
 logs*
+
+#python
+*.pyc
+*.pyo
 
 #editor
 .vscode
