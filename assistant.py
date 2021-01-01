@@ -20,7 +20,7 @@ class Assistant:
     takes stored values and sets members of instance
     '''
     def __process_config(self):
-        self.Name = 'Ant' if not self.config_data['name'] else self.config_data['name']
+        self.Name = 'Ant' if not self.config_data['name']['value'] else self.config_data['name']['value']
 
     '''
     writes changes in memory back to file
@@ -28,6 +28,13 @@ class Assistant:
     def __save_config(self):
         with open(self.config_file_name, 'w') as f:
             json.dump(self.config_data, f,sort_keys=True, indent=4)
+
+    '''
+    Allows user to edit and overwrite the config.json file
+    '''
+    def __edit_config(self):
+        self.speak('What would you like to edit?')
+        # provide a list of updateable variables. Have allow_modification == true
 
     '''
     speech to text
@@ -61,13 +68,15 @@ class Assistant:
     business logic
     '''
     def process_command(self, voice_data: str):
+        if 'change my settings' in voice_data:
+            self.speak('Sure. Opening up configs.')
+            self.__edit_config()
         if 'what is your name' in voice_data:
             self.speak(f"My name is {self.Name}")
         if 'what time is it' in voice_data:
             self.speak(f"The current time is {ctime()}")
         if 'exit' in voice_data or 'shut down' in voice_data:
             self.speak('Goodbye!')
-            # return false? tells to end?
             return False
             #exit()
         return True

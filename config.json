@@ -1,5 +1,8 @@
 {
-    "name":"",
-    "created_date":"",
+    "name":{
+        "value":"",
+        "allow_modification": true
+    },
+    "created_date":"Fri Jan  1 08:53:14 2021",
     "last_modified_date":""
 }

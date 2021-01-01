@@ -28,3 +28,8 @@ Run using
 
 python3 main.py
 ```
+
+# Other findings along the way
+```
+*.pyc in the git ignore does not seem to work. Use "git rm -f *.pyc" to stop this from being tracked
+```
