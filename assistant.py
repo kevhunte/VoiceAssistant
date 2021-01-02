@@ -5,11 +5,14 @@ from gtts import gTTS
 from time import ctime
 
 #recording instance
-r = sr.Recognizer()
+mic = sr.Recognizer()
 
 class Assistant:
 
-    def __init__(self, config):
+    '''
+    Initializes instance with configuration file. Base is empty, but can be customized over time
+    '''
+    def __init__(self, config: str):
         self.config_file_name = config
         with open(self.config_file_name, 'r') as f:
             self.config_data = json.load(f)
@@ -27,14 +30,32 @@ class Assistant:
     '''
     def __save_config(self):
         with open(self.config_file_name, 'w') as f:
+            self.config_data['last_modified_date'] = str(ctime())
             json.dump(self.config_data, f,sort_keys=True, indent=4)
 
     '''
     Allows user to edit and overwrite the config.json file
     '''
     def __edit_config(self):
+        options = ', '.join([key for (key, val) in self.config_data.items() if isinstance(val,dict) and val.get('allow_modification') is True])
+        self.speak('The following options can be changed. ')
+        self.speak(options)
         self.speak('What would you like to edit?')
-        # provide a list of updateable variables. Have allow_modification == true
+        choice = self.record_command()
+        self.speak(f"What should the new {choice} be?")
+        new_value = self.record_command()
+        # set value in configs dict. Make sure not to rewrite structure
+        if 'name' in choice.lower():
+            self.__set_config_in_memory('name',new_value)
+            self.Name = new_value
+        self.speak(f'Saving {new_value} as {choice}')
+        self.__save_config()
+
+    '''
+    Safely rewrites value in dict
+    '''
+    def __set_config_in_memory(self, key: str, val):
+        self.config_data[key]['value'] = val
 
     '''
     speech to text
@@ -42,10 +63,10 @@ class Assistant:
     def record_command(self):
         #global r
         with sr.Microphone() as source:
-            audio = r.listen(source)
+            audio = mic.listen(source)
             voice_data = ''
             try:
-                voice_data = r.recognize_google(audio)
+                voice_data = mic.recognize_google(audio)
             except sr.UnknownValueError:
                 self.speak('Sorry I did not understand that command')
             except sr.RequestError:
@@ -78,5 +99,4 @@ class Assistant:
         if 'exit' in voice_data or 'shut down' in voice_data:
             self.speak('Goodbye!')
             return False
-            #exit()
         return True

@@ -32,4 +32,7 @@ python3 main.py
 # Other findings along the way
 ```
 *.pyc in the git ignore does not seem to work. Use "git rm -f *.pyc" to stop this from being tracked
+
+The config.json will be a possible location of PII. This will not be tracked after updates to the skeleton are made. To do the same after pulling down this repo, run the following command 
+"git update-index --assume-unchanged config.json"
 ```
