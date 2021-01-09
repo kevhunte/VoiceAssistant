@@ -7,7 +7,6 @@ def handler():
     running = True
     while running:
         voice_data = VA.record_command()
-        print(f"received - {voice_data}")
         running = VA.process_command(voice_data)
 
 if __name__ == '__main__':
